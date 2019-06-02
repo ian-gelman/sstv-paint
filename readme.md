@@ -10,4 +10,4 @@ Several SSTV receive chains are available from the itunes store, google play, or
 
 ## to run:
 
-python3 paint.py
+`python3 paint.py`
