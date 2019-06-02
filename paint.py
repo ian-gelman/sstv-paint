@@ -9,6 +9,7 @@ import datetime
 import tkinter.font as font
 import pyscreenshot as ImageGrab
 import struct, pyaudio
+from tkinter.colorchooser import *
 
 class PyAudioSSTV(object):
     def __init__(self, sstv):
@@ -103,7 +104,9 @@ class PaintApp:
 
             # Make sure x and y have a value
             if self.x_pos is not None and self.y_pos is not None:
+                radius = self.size/2
                 event.widget.create_line(self.x_pos, self.y_pos, event.x, event.y, smooth=TRUE, width=self.size, fill=self.color)
+                event.widget.create_oval(event.x-radius, event.y+radius, event.x+radius, event.y-radius, fill=self.color, width=0)
 
             self.x_pos = event.x
             self.y_pos = event.y
@@ -215,11 +218,39 @@ class PaintApp:
     def to_violet(self, event=None):
         self.color = "violet"
 
+    def getColor(self, event=None):
+        color = askcolor()
+        self.color = color[-1]
+
+    def to_small(self, event=None):
+        self.size = 4
+
+    def to_med(self, event=None):
+        self.size = 8
+
+    def to_big(self, event=None):
+        self.size = 12
+
+    def to_huge(self, event=None):
+        self.size = 16
+
+    def to_chonk(self, event=None):
+        self.size = 20
+
+    def to_heck(self, event=None):
+        self.size = 30
+
+    def to_bigchung(self, event=None):
+        self.size = 40
+
+    def to_ohlawd(self, event=None):
+        self.size = 50
+
     def __init__(self, root):
         self.width = 1280
         self.height = 960
         self.drawing_area = Canvas(root, width=self.width, height=self.height, background='white')
-        self.drawing_area.grid(row = 0, column = 0, rowspan=8)
+        self.drawing_area.grid(row = 0, column = 0, rowspan=13)
         self.drawing_area.bind("<Motion>", self.motion)
         self.drawing_area.bind("<ButtonPress-1>", self.left_but_down)
         self.drawing_area.bind("<ButtonRelease-1>", self.left_but_up)
@@ -228,18 +259,41 @@ root = Tk()
 
 paint_app = PaintApp(root)
 
+root.title("SSTV Paint")
+
 #ttk.Button(root, text="hello").pack()
 
-MyFont = font.nametofont('TkDefaultFont').configure(size=24)
+MyFont = font.Font(family="Helvetica", size=24)
+smallFont = font.Font(family="Helvetica", size=14)
+
+lineSmall = font.Font(family="Helvetica", size=10)
+lineMed = font.Font(family="Helvetica", size=12)
+lineBig = font.Font(family="Helvetica", size=14)
+lineHuge = font.Font(family="Helvetica", size=16)
+lineChonk = font.Font(family="Helvetica", size=18)
+lineHeckinChonk = font.Font(family="Helvetica", size=20)
+lineBigChungus = font.Font(family="Helvetica", size=22)
+lineOHLAWDHECOMIN = font.Font(family="Helvetica", size=24)
+
+wheel = PhotoImage(file="./img/colorwheel.png")
 
 Button(root, text="Send", font=MyFont, width=6, height=2, command=paint_app.grab_n_send).grid(sticky = S)
-Button(root, text="white", command=paint_app.to_white).grid(row=0, column=1)
-Button(root, text="red", command=paint_app.to_red).grid(row=1, column=1)
-Button(root, text="orange", command=paint_app.to_orange).grid(row=2, column=1)
-Button(root, text="yellow", command=paint_app.to_yellow).grid(row=3, column=1)
-Button(root, text="green", command=paint_app.to_green).grid(row=4, column=1)
-Button(root, text="blue", command=paint_app.to_blue).grid(row=5, column=1)
-Button(root, text="indigo", command=paint_app.to_indigo).grid(row=6, column=1)
-Button(root, text="violet", command=paint_app.to_violet).grid(row=7, column=1)
+Button(root, bg="white", width=6, height=3, command=paint_app.to_white).grid(row=0, column=1)
+Button(root, bg="red", width=6, height=3, command=paint_app.to_red).grid(row=1, column=1)
+Button(root, bg="orange", width=6, height=3, command=paint_app.to_orange).grid(row=2, column=1)
+Button(root, bg="yellow", width=6, height=3, command=paint_app.to_yellow).grid(row=3, column=1)
+Button(root, bg="green", width=6, height=3, command=paint_app.to_green).grid(row=0, column=2)
+Button(root, bg="blue", width=6, height=3, command=paint_app.to_blue).grid(row=1, column=2)
+Button(root, bg="indigo", width=6, height=3, command=paint_app.to_indigo).grid(row=2, column=2)
+Button(root, bg="violet", width=6, height=3, command=paint_app.to_violet).grid(row=3, column=2)
+Button(root, text="—", font=lineSmall, width=1, height=1, command=paint_app.to_small).grid(row=4, column=1)
+Button(root, text="—", font=lineMed, width=1, height=1, command=paint_app.to_med).grid(row=5, column=1)
+Button(root, text="—", font=lineBig, width=1, height=1, command=paint_app.to_big).grid(row=6, column=1)
+Button(root, text="—", font=lineHuge, width=1, height=1, command=paint_app.to_huge).grid(row=7, column=1)
+Button(root, text="—", font=lineChonk, width=1, height=1, command=paint_app.to_chonk).grid(row=4, column=2)
+Button(root, text="—", font=lineHeckinChonk, width=1, height=1, command=paint_app.to_heck).grid(row=5, column=2)
+Button(root, text="—", font=lineBigChungus, width=1, height=1, command=paint_app.to_bigchung).grid(row=6, column=2)
+Button(root, text="—", font=lineOHLAWDHECOMIN, width=1, height=1, command=paint_app.to_ohlawd).grid(row=7, column=2)
+Button(root, image=wheel, text='Custom\nColor', font=smallFont, command=paint_app.getColor).grid(row=8,column=1,columnspan=2)
 
 root.mainloop()
